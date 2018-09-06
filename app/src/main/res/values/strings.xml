@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">ChllecaraPrep</string>
+    <string name="app_name">Challecara</string>
+
+    <string name="sign_out">sign out</string>
+    <string name="lets_sign_up">まずはログインしましょう</string>
+    <string name="sign_up">登録/ログイン</string>
 </resources>
