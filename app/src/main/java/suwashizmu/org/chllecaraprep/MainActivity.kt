@@ -32,7 +32,11 @@ class MainActivity : AppCompatActivity() {
                 //ログイン・登録画面を表示
                 gotoSignUp()
             } else {
-                //チャット画面を表示
+                //TODO画面を表示
+                supportFragmentManager
+                        .beginTransaction()
+                        .add(R.id.container, TodoListFragment.newInstance())
+                        .commit()
             }
         }
     }
