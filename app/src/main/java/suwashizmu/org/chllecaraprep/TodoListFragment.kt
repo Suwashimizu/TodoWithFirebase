@@ -20,6 +20,8 @@ class TodoListFragment : Fragment() {
 
     private lateinit var binding: TodoListFragBinding
 
+    private var todoRepository: TodoRepository? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.todo_list_frag, container, false)
@@ -32,9 +34,34 @@ class TodoListFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            requireActivity().finish()
+            return
+        }
+
+        binding.listView.adapter = TodoArrayAdapter(requireActivity())
+
+        //ListViewへアイテムを追加
+        todoRepository = TodoRepository(user) {
+            (binding.listView.adapter as TodoArrayAdapter).clear()
+            (binding.listView.adapter as TodoArrayAdapter).addAll(it)
+        }
+
+        //送信ボタン
+        binding.addButton.setOnClickListener {
+            todoRepository?.add(Todo(binding.todoEdit.text.toString()))
+            binding.todoEdit.text.clear()
+        }
+    }
 
     override fun onResume() {
         super.onResume()
+
+        todoRepository?.fetch()
     }
 
     override fun onPause() {
